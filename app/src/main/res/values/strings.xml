@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Dlivry</string>
+    //FB
+    <string name="facebook_app_id">991420201580582</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">8271f3f919c83f4bae7113e23fe5c42b</string>
+
+    <string name="field_is_required">Campo es requerido</string>
+
 </resources>
