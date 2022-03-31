@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.dlivry" >
+    package="com.example.dlivry">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
@@ -16,7 +16,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Dlivry" >
+        android:theme="@style/Theme.Dlivry">
+        <activity
+            android:name=".Menu"
+            android:exported="false"
+            android:label="@string/title_activity_menu" />
         <activity
             android:name=".RecuperarContra"
             android:exported="false" />
@@ -24,17 +28,17 @@
             android:name=".ConfirmarCuenta"
             android:exported="false" />
         <activity
-            android:name=".RegistroFoto"
+            android:name=".Registro.RegistroFoto"
             android:exported="false" />
         <activity
-            android:name=".Registro"
+            android:name=".Registro.Registro"
             android:exported="false" />
         <activity
             android:name=".Login"
             android:exported="false" />
         <activity
             android:name=".Splash"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,8 +47,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false" >
-        </activity>
+            android:exported="false"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -62,7 +65,7 @@
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

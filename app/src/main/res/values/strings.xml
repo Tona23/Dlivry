@@ -6,5 +6,21 @@
     <string name="facebook_client_token">8271f3f919c83f4bae7113e23fe5c42b</string>
 
     <string name="field_is_required">Campo es requerido</string>
+    <string name="title_activity_menu">Menu</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="txt_c_nombre">Nombre</string>
+    <string name="txt_c_correo">Correo</string>
+    <string name="txt_c_numero">Numero</string>
+    <string name="txt_c_ruta">Ruta</string>
+    <string name="txt_c_contrasena">Contraseña</string>
+    <string name="txt_c_confirmar">Confirmar Contraseña</string>
+    <string name="rb_c_terminos">Terminos y Condiciones</string>
+    <string name="txt_c_apellido">Apellido</string>
+    <string name="tv_c_olvidaste">Olvidaste contraseña?</string>
+    <string name="tv_c_introducir">Introduce</string>
+    <string name="btn_c_enviar">Reenviar</string>
+    <string name="sending_mail">Enviando correo</string>
 
 </resources>

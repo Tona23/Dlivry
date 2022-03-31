@@ -19,6 +19,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.dlivry.Registro.Registro;
+import com.example.dlivry.Registro.RegistroConstructor;
+import com.example.dlivry.Registro.RegistroFoto;
 import com.example.dlivry.utils.InputValidation;
 import com.example.dlivry.utils.MemoriaPreferences;
 import com.facebook.CallbackManager;
@@ -37,7 +40,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -247,237 +249,7 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            mAuth = FirebaseAuth.getInstance();
-                            Toast.makeText(getApplicationContext(), ""+mAuth.getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
-                           /* RegistroConstructor emp = new RegistroConstructor( nombre, apellido, "fecha1", numero, "correo", "contrasena", ruta,"false");
-                            try {
-                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                                databaseReference.child("RegistroControl").addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        if (snapshot.exists()&&rg==false) {
-
-                                            if(cont==false) {
-                                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                                                    key = "" + (Integer.parseInt(dataSnapshot.getKey()) + 1);
-
-                                                }
-                                            }
-                                            Query databaseReferences = FirebaseDatabase.getInstance().getReference("RegistroControl").orderByChild("correo").equalTo(mAuth.getCurrentUser().getEmail());
-                                            databaseReferences.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    if (snapshot.exists()==false&&rg==false){
-
-                                                        emp.setKey(key);
-                                                        key = emp.getKey();
-                                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                                        hashMap.put("nombre", mAuth.getCurrentUser().getDisplayName());
-                                                        hashMap.put("apellido", " ");
-                                                        hashMap.put("numero"," "+ mAuth.getCurrentUser().getPhoneNumber());
-                                                        hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                        hashMap.put("confirmado", "true");
-                                                        hashMap.put("ruta", "27");
-                                                        dao.update(key, hashMap).addOnSuccessListener(suc ->
-                                                        {
-
-                                                            cont = true;
-                                                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                            DatabaseReference databaseReferenceE = FirebaseDatabase.getInstance().getReference();
-                                                            databaseReferenceE.child("ControlEstado").addListenerForSingleValueEvent(new ValueEventListener() {
-
-                                                                @Override
-                                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                    if (snapshot.exists()&&rg==false){
-                                                                        int cont =0;
-                                                                        int a=0;
-                                                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-
-                                                                            String mail= dataSnapshot.child("correo").getValue().toString();
-                                                                            if(mail==mAuth.getCurrentUser().getEmail()){
-                                                                                a=1;
-                                                                            }
-                                                                        }
-                                                                        if(a==0){
-                                                                            Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_LONG).show();
-
-                                                                            HashMap<String, Object> hashMap = new HashMap<>();
-                                                                            hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                                            hashMap.put("ruta", "27");
-
-                                                                            FirebaseDatabase db = FirebaseDatabase.getInstance();
-                                                                            DatabaseReference databaseReference1E;
-                                                                            databaseReference1E = db.getReference("ControlEstado");
-                                                                            databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
-                                                                            {
-
-                                                                                Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                                            }).addOnFailureListener(er ->
-                                                                            {
-                                                                                Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                            });
-                                                                        }
-                                                                        rg=true;
-                                                                    }else  if (!snapshot.exists()&&rg==false){
-                                                                        key="0";
-                                                                        emp.setKey(key);
-                                                                        key = emp.getKey();
-                                                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                                                        hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                                        hashMap.put("ruta", "27");
-
-                                                                        FirebaseDatabase db = FirebaseDatabase.getInstance();
-                                                                        DatabaseReference databaseReference1E;
-                                                                        databaseReference1E = db.getReference("ControlEstado");
-                                                                        databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
-                                                                        {
-
-                                                                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                                        }).addOnFailureListener(er ->
-                                                                        {
-                                                                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                        });
-                                                                        rg=true;
-                                                                    }
-                                                                }
-
-                                                                @Override
-                                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                                }
-                                                            });
-                                                        }).addOnFailureListener(er ->
-                                                        {
-                                                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                        });
-
-
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                    Toast.makeText(getApplicationContext(), "No hay registro", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }else if (!snapshot.exists()&&rg==false){
-                                            int cont = 0;
-                                            key="0";
-                                            Query databaseReferences = FirebaseDatabase.getInstance().getReference("RegistroControl").orderByChild("correo").equalTo(mAuth.getCurrentUser().getEmail());
-                                            databaseReferences.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    if (snapshot.exists()==false&&rg==false){
-
-                                                        emp.setKey(key);
-                                                        key = emp.getKey();
-                                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                                        hashMap.put("nombre", mAuth.getCurrentUser().getDisplayName());
-                                                        hashMap.put("apellido", " ");
-                                                        hashMap.put("numero"," "+ mAuth.getCurrentUser().getPhoneNumber());
-                                                        hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                        hashMap.put("confirmado", "true");
-                                                        hashMap.put("ruta", "27");
-                                                        dao.update(key, hashMap).addOnSuccessListener(suc ->
-                                                        {
-                                                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                            DatabaseReference databaseReferenceE = FirebaseDatabase.getInstance().getReference();
-                                                            databaseReferenceE.child("ControlEstado").addListenerForSingleValueEvent(new ValueEventListener() {
-
-                                                                @Override
-                                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                    if (snapshot.exists()&&rg==false){
-                                                                        int cont =0;
-                                                                        int a=0;
-                                                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-
-                                                                            String mail= dataSnapshot.child("correo").getValue().toString();
-                                                                            if(mail==mAuth.getCurrentUser().getEmail()){
-                                                                                a=1;
-                                                                            }
-                                                                        }
-                                                                        if(a==0){
-                                                                            Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_LONG).show();
-                                                                            emp.setKey(key);
-                                                                            key = emp.getKey();
-                                                                            HashMap<String, Object> hashMap = new HashMap<>();
-                                                                            hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                                            hashMap.put("ruta", "27");
-
-                                                                            FirebaseDatabase db = FirebaseDatabase.getInstance();
-                                                                            DatabaseReference databaseReference1E;
-                                                                            databaseReference1E = db.getReference("ControlEstado");
-                                                                            databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
-                                                                            {
-
-                                                                                Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                                            }).addOnFailureListener(er ->
-                                                                            {
-                                                                                Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                            });
-                                                                        }
-                                                                        rg=true;
-                                                                    }else if (!snapshot.exists()&&rg==false){
-                                                                        key="0";
-                                                                        emp.setKey(key);
-                                                                        key = emp.getKey();
-                                                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                                                        hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                                        hashMap.put("ruta", "27");
-
-                                                                        FirebaseDatabase db = FirebaseDatabase.getInstance();
-                                                                        DatabaseReference databaseReference1E;
-                                                                        databaseReference1E = db.getReference("ControlEstado");
-                                                                        databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
-                                                                        {
-
-                                                                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                                        }).addOnFailureListener(er ->
-                                                                        {
-                                                                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                        });
-                                                                        rg=true;
-                                                                    }
-                                                                }
-
-                                                                @Override
-                                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                                }
-                                                            });
-                                                        }).addOnFailureListener(er ->
-                                                        {
-                                                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                        });
-
-
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                    Toast.makeText(getApplicationContext(), "No hay registro", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
-
-
-                            }catch (Exception e){
-                                Toast.makeText(getApplicationContext(), ""+e, Toast.LENGTH_SHORT).show();
-                            }*/
-
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            //FirebaseUser user = mAuth.getCurrentUser();
-                            Intent a = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(a);
-                            finish();
+                            log();
 //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
                         } else {
                             // If sign in fails, display a message to the user.
@@ -486,6 +258,240 @@ public class Login extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void log(){
+        mAuth = FirebaseAuth.getInstance();
+        Toast.makeText(getApplicationContext(), ""+mAuth.getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
+        RegistroConstructor emp = new RegistroConstructor( nombre, apellido, "fecha1", numero, "correo", "contrasena", ruta,"false");
+        try {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.child("RegistroControl").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()&&rg==false) {
+
+                        if(cont==false) {
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                                key = "" + (Integer.parseInt(dataSnapshot.getKey()) + 1);
+
+                            }
+                        }
+                        Query databaseReferences = FirebaseDatabase.getInstance().getReference("RegistroControl").orderByChild("correo").equalTo(mAuth.getCurrentUser().getEmail());
+                        databaseReferences.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()==false&&rg==false){
+
+                                    emp.setKey(key);
+                                    key = emp.getKey();
+                                    HashMap<String, Object> hashMap = new HashMap<>();
+                                    hashMap.put("nombre", mAuth.getCurrentUser().getDisplayName());
+                                    hashMap.put("apellido", " ");
+                                    hashMap.put("numero"," "+ mAuth.getCurrentUser().getPhoneNumber());
+                                    hashMap.put("correo", mAuth.getCurrentUser().getEmail());
+                                    hashMap.put("confirmado", "true");
+                                    hashMap.put("ruta", "27");
+                                    databaseReference.child("RegistroControl").child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
+                                    {
+
+                                        cont = true;
+                                        Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                        DatabaseReference databaseReferenceE = FirebaseDatabase.getInstance().getReference();
+                                        databaseReferenceE.child("ControlEstado").addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                if (snapshot.exists()&&rg==false){
+                                                    int cont =0;
+                                                    int a=0;
+                                                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                                                        String mail= dataSnapshot.child("correo").getValue().toString();
+                                                        if(mail==mAuth.getCurrentUser().getEmail()){
+                                                            a=1;
+                                                        }
+                                                    }
+                                                    if(a==0){
+                                                        Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_LONG).show();
+
+                                                        HashMap<String, Object> hashMap = new HashMap<>();
+                                                        hashMap.put("correo", mAuth.getCurrentUser().getEmail());
+                                                        hashMap.put("ruta", "27");
+
+                                                        FirebaseDatabase db = FirebaseDatabase.getInstance();
+                                                        DatabaseReference databaseReference1E;
+                                                        databaseReference1E = db.getReference("ControlEstado");
+                                                        databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
+                                                        {
+
+                                                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                                        }).addOnFailureListener(er ->
+                                                        {
+                                                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        });
+                                                    }
+                                                    rg=true;
+                                                }else  if (!snapshot.exists()&&rg==false){
+                                                    key="0";
+                                                    emp.setKey(key);
+                                                    key = emp.getKey();
+                                                    HashMap<String, Object> hashMap = new HashMap<>();
+                                                    hashMap.put("correo", mAuth.getCurrentUser().getEmail());
+                                                    hashMap.put("ruta", "27");
+
+                                                    FirebaseDatabase db = FirebaseDatabase.getInstance();
+                                                    DatabaseReference databaseReference1E;
+                                                    databaseReference1E = db.getReference("ControlEstado");
+                                                    databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
+                                                    {
+
+                                                        Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                                    }).addOnFailureListener(er ->
+                                                    {
+                                                        Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    });
+                                                    rg=true;
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                            }
+                                        });
+                                    }).addOnFailureListener(er ->
+                                    {
+                                        Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(getApplicationContext(), "No hay registro", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }else if (!snapshot.exists()&&rg==false){
+                        int cont = 0;
+                        key="0";
+                        Query databaseReferences = FirebaseDatabase.getInstance().getReference("RegistroControl").orderByChild("correo").equalTo(mAuth.getCurrentUser().getEmail());
+                        databaseReferences.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()==false&&rg==false){
+
+                                    emp.setKey(key);
+                                    key = emp.getKey();
+                                    HashMap<String, Object> hashMap = new HashMap<>();
+                                    hashMap.put("nombre", mAuth.getCurrentUser().getDisplayName());
+                                    hashMap.put("apellido", " ");
+                                    hashMap.put("numero"," "+ mAuth.getCurrentUser().getPhoneNumber());
+                                    hashMap.put("correo", mAuth.getCurrentUser().getEmail());
+                                    hashMap.put("confirmado", "true");
+                                    hashMap.put("ruta", "27");
+                                    databaseReference.child("RegistroControl").child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                        DatabaseReference databaseReferenceE = FirebaseDatabase.getInstance().getReference();
+                                        databaseReferenceE.child("ControlEstado").addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                if (snapshot.exists()&&rg==false){
+                                                    int cont =0;
+                                                    int a=0;
+                                                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                                                        String mail= dataSnapshot.child("correo").getValue().toString();
+                                                        if(mail==mAuth.getCurrentUser().getEmail()){
+                                                            a=1;
+                                                        }
+                                                    }
+                                                    if(a==0){
+                                                        Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_LONG).show();
+                                                        emp.setKey(key);
+                                                        key = emp.getKey();
+                                                        HashMap<String, Object> hashMap = new HashMap<>();
+                                                        hashMap.put("correo", mAuth.getCurrentUser().getEmail());
+                                                        hashMap.put("ruta", "27");
+
+                                                        FirebaseDatabase db = FirebaseDatabase.getInstance();
+                                                        DatabaseReference databaseReference1E;
+                                                        databaseReference1E = db.getReference("ControlEstado");
+                                                        databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
+                                                        {
+
+                                                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                                        }).addOnFailureListener(er ->
+                                                        {
+                                                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        });
+                                                    }
+                                                    rg=true;
+                                                }else if (!snapshot.exists()&&rg==false){
+                                                    key="0";
+                                                    emp.setKey(key);
+                                                    key = emp.getKey();
+                                                    HashMap<String, Object> hashMap = new HashMap<>();
+                                                    hashMap.put("correo", mAuth.getCurrentUser().getEmail());
+                                                    hashMap.put("ruta", "27");
+
+                                                    FirebaseDatabase db = FirebaseDatabase.getInstance();
+                                                    DatabaseReference databaseReference1E;
+                                                    databaseReference1E = db.getReference("ControlEstado");
+                                                    databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
+                                                    {
+
+                                                        Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
+                                                    }).addOnFailureListener(er ->
+                                                    {
+                                                        Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    });
+                                                    rg=true;
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                            }
+                                        });
+                                    }).addOnFailureListener(er ->
+                                    {
+                                        Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(getApplicationContext(), "No hay registro", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), ""+e, Toast.LENGTH_SHORT).show();
+        }
+
+        // Sign in success, update UI with the signed-in user's information
+        Log.d(TAG, "signInWithCredential:success");
+        //FirebaseUser user = mAuth.getCurrentUser();
+        Intent a = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(a);
+        finish();
     }
 
     boolean log=false;
@@ -590,236 +596,7 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            mAuth = FirebaseAuth.getInstance();
-                            Toast.makeText(getApplicationContext(), ""+mAuth.getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
-                           /* RegistroConstructor emp = new RegistroConstructor( nombre, apellido, "fecha1", numero, "correo", "contrasena", ruta,"false");
-                            try {
-                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                                databaseReference.child("RegistroControl").addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        if (snapshot.exists()&&rg==false) {
-
-                                            if(cont==false) {
-                                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                                                    key = "" + (Integer.parseInt(dataSnapshot.getKey()) + 1);
-
-                                                }
-                                            }
-                                            Query databaseReferences = FirebaseDatabase.getInstance().getReference("RegistroControl").orderByChild("correo").equalTo(mAuth.getCurrentUser().getEmail());
-                                            databaseReferences.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    if (snapshot.exists()==false){
-
-                                                        emp.setKey(key);
-                                                        key = emp.getKey();
-                                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                                        hashMap.put("nombre", mAuth.getCurrentUser().getDisplayName());
-                                                        hashMap.put("apellido", " ");
-                                                        hashMap.put("numero"," "+ mAuth.getCurrentUser().getPhoneNumber());
-                                                        hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                        hashMap.put("confirmado", "true");
-                                                        hashMap.put("ruta", "27");
-                                                        dao.update(key, hashMap).addOnSuccessListener(suc ->
-                                                        {
-                                                            cont = true;
-                                                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                            DatabaseReference databaseReferenceE = FirebaseDatabase.getInstance().getReference();
-                                                            databaseReferenceE.child("ControlEstado").addListenerForSingleValueEvent(new ValueEventListener() {
-
-                                                                @Override
-                                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                    if (snapshot.exists()&&rg==false){
-                                                                        int cont =0;
-                                                                        int a=0;
-                                                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-
-                                                                            String mail= dataSnapshot.child("correo").getValue().toString();
-                                                                            if(mail==mAuth.getCurrentUser().getEmail()){
-                                                                                a=1;
-                                                                            }
-                                                                        }
-                                                                        if(a==0){
-                                                                            Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_LONG).show();
-
-                                                                            HashMap<String, Object> hashMap = new HashMap<>();
-                                                                            hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                                            hashMap.put("ruta", "27");
-
-                                                                            FirebaseDatabase db = FirebaseDatabase.getInstance();
-                                                                            DatabaseReference databaseReference1E;
-                                                                            databaseReference1E = db.getReference("ControlEstado");
-                                                                            databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
-                                                                            {
-
-                                                                                Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                                            }).addOnFailureListener(er ->
-                                                                            {
-                                                                                Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                            });
-                                                                        }
-                                                                        rg=true;
-                                                                    }else  if (!snapshot.exists()&&rg==false){
-                                                                        key="0";
-                                                                        emp.setKey(key);
-                                                                        key = emp.getKey();
-                                                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                                                        hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                                        hashMap.put("ruta", "27");
-
-                                                                        FirebaseDatabase db = FirebaseDatabase.getInstance();
-                                                                        DatabaseReference databaseReference1E;
-                                                                        databaseReference1E = db.getReference("ControlEstado");
-                                                                        databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
-                                                                        {
-
-                                                                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                                        }).addOnFailureListener(er ->
-                                                                        {
-                                                                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                        });
-                                                                        rg=true;
-                                                                    }
-                                                                }
-
-                                                                @Override
-                                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                                }
-                                                            });
-                                                        }).addOnFailureListener(er ->
-                                                        {
-                                                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                        });
-
-
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                    Toast.makeText(getApplicationContext(), "No hay registro", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }else if (!snapshot.exists()&&rg==false){
-                                            int cont = 0;
-                                            key="0";
-                                            Query databaseReferences = FirebaseDatabase.getInstance().getReference("RegistroControl").orderByChild("correo").equalTo(mAuth.getCurrentUser().getEmail());
-                                            databaseReferences.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    if (snapshot.exists()==false){
-
-                                                        emp.setKey(key);
-                                                        key = emp.getKey();
-                                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                                        hashMap.put("nombre", mAuth.getCurrentUser().getDisplayName());
-                                                        hashMap.put("apellido", " ");
-                                                        hashMap.put("numero"," "+ mAuth.getCurrentUser().getPhoneNumber());
-                                                        hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                        hashMap.put("confirmado", "true");
-                                                        hashMap.put("ruta", "27");
-                                                        dao.update(key, hashMap).addOnSuccessListener(suc ->
-                                                        {
-                                                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                            DatabaseReference databaseReferenceE = FirebaseDatabase.getInstance().getReference();
-                                                            databaseReferenceE.child("ControlEstado").addListenerForSingleValueEvent(new ValueEventListener() {
-
-                                                                @Override
-                                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                    if (snapshot.exists()&&rg==false){
-                                                                        int cont =0;
-                                                                        int a=0;
-                                                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-
-                                                                            String mail= dataSnapshot.child("correo").getValue().toString();
-                                                                            if(mail==mAuth.getCurrentUser().getEmail()){
-                                                                                a=1;
-                                                                            }
-                                                                        }
-                                                                        if(a==0){
-                                                                            Toast.makeText(getApplicationContext(), "" + key, Toast.LENGTH_LONG).show();
-                                                                            emp.setKey(key);
-                                                                            key = emp.getKey();
-                                                                            HashMap<String, Object> hashMap = new HashMap<>();
-                                                                            hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                                            hashMap.put("ruta", "27");
-
-                                                                            FirebaseDatabase db = FirebaseDatabase.getInstance();
-                                                                            DatabaseReference databaseReference1E;
-                                                                            databaseReference1E = db.getReference("ControlEstado");
-                                                                            databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
-                                                                            {
-
-                                                                                Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                                            }).addOnFailureListener(er ->
-                                                                            {
-                                                                                Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                            });
-                                                                        }
-                                                                        rg=true;
-                                                                    }else if (!snapshot.exists()&&rg==false){
-                                                                        key="0";
-                                                                        emp.setKey(key);
-                                                                        key = emp.getKey();
-                                                                        HashMap<String, Object> hashMap = new HashMap<>();
-                                                                        hashMap.put("correo", mAuth.getCurrentUser().getEmail());
-                                                                        hashMap.put("ruta", "27");
-
-                                                                        FirebaseDatabase db = FirebaseDatabase.getInstance();
-                                                                        DatabaseReference databaseReference1E;
-                                                                        databaseReference1E = db.getReference("ControlEstado");
-                                                                        databaseReference1E.child(key).updateChildren(hashMap).addOnSuccessListener(suc ->
-                                                                        {
-
-                                                                            Toast.makeText(getApplicationContext(), "Record is updated", Toast.LENGTH_SHORT).show();
-                                                                        }).addOnFailureListener(er ->
-                                                                        {
-                                                                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                        });
-                                                                        rg=true;
-                                                                    }
-                                                                }
-
-                                                                @Override
-                                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                                }
-                                                            });
-                                                        }).addOnFailureListener(er ->
-                                                        {
-                                                            Toast.makeText(getApplicationContext(), "" + er.getMessage(), Toast.LENGTH_SHORT).show();
-                                                        });
-
-
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                    Toast.makeText(getApplicationContext(), "No hay registro", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
-
-
-                            }catch (Exception e){
-                                Toast.makeText(getApplicationContext(), ""+e, Toast.LENGTH_SHORT).show();
-                            }*/
-
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            //FirebaseUser user = mAuth.getCurrentUser();
-                            Intent a = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(a);
-                            finish();
+                           log();
 //Iniciar DASHBOARD u otra actividad luego del SigIn Exitoso
                         } else {
                             // If sign in fails, display a message to the user.
@@ -828,11 +605,6 @@ public class Login extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-    private void  SendUserData(FirebaseUser user){
-        Log.d("Login Success","SUccess");
-        Log.d("User ",user.getUid());
     }
 
     @Override
