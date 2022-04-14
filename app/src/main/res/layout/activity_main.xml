@@ -7,8 +7,6 @@
     tools:context=".MainActivity">
 
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,6 +24,15 @@
             android:layout_marginTop="50dp"
             android:layout_centerHorizontal="true"
             android:textSize="30sp"/>
+
+        <Button
+            android:id="@+id/btn_llamada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvDate"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:text="Llamar" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
